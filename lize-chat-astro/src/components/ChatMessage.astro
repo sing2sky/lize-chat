@@ -1,0 +1,45 @@
+---
+interface Props {
+  speaker: 'guest' | 'host';
+  content: string;
+  name?: string;
+}
+
+const { speaker, content, name } = Astro.props;
+---
+
+<div class={`flex ${speaker === 'guest' ? 'justify-start' : 'justify-end'} mb-8`}>
+  <div class={`max-w-2xl ${speaker === 'guest' ? 'mr-auto' : 'ml-auto'}`}>
+    <div class={`flex items-start ${speaker === 'guest' ? 'flex-row' : 'flex-row-reverse'} gap-4`}>
+      <div class="flex-shrink-0">
+        <div class={`w-12 h-12 rounded-full flex items-center justify-center text-sm font-medium ${
+          speaker === 'guest' 
+            ? 'bg-cyan text-white' 
+            : 'bg-deep-blue text-white'
+        }`}>
+          {speaker === 'guest' ? (name ? name.charAt(0) : '嘉') : '丽'}
+        </div>
+      </div>
+      <div class={`flex-1 ${speaker === 'guest' ? 'text-left' : 'text-right'}`}>
+        {name && (
+          <div class={`text-sm font-semibold mb-2 ${
+            speaker === 'guest' ? 'text-cyan' : 'text-deep-blue'
+          }`}>
+            {speaker === 'guest' ? name : '丽泽'}
+          </div>
+        )}
+        <div class={`rounded-lg p-5 ${
+          speaker === 'guest'
+            ? 'bg-bg-light text-text-dark border border-gray-100'
+            : 'bg-deep-blue text-white'
+        }`}>
+          <div class={`prose prose-sm max-w-none ${
+            speaker === 'host' 
+              ? 'prose-invert prose-headings:text-white prose-p:text-white prose-strong:text-white prose-li:text-white prose-a:text-cyan prose-a:no-underline hover:prose-a:underline' 
+              : 'prose-headings:text-text-dark prose-p:text-text-dark prose-strong:text-text-dark prose-li:text-text-dark prose-a:text-cyan prose-a:no-underline hover:prose-a:underline'
+          }`} set:html={content} />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

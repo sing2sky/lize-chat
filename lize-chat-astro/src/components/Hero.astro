@@ -1,0 +1,25 @@
+---
+---
+
+<section class="bg-white py-16 border-b border-gray-100">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h1 class="text-3xl md:text-4xl font-serif text-text-dark mb-8 leading-relaxed">
+      丽泽讲会：思想的流转与碰撞
+    </h1>
+    <div class="max-w-2xl mx-auto">
+      <form class="relative" onsubmit="event.preventDefault(); const query = this.querySelector('input').value; if(query) window.location.href = '/?search=' + encodeURIComponent(query);">
+        <input
+          type="text"
+          placeholder="搜索对话内容..."
+          class="w-full px-6 py-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan focus:border-transparent text-text-dark placeholder-gray-400"
+        />
+        <button
+          type="submit"
+          class="absolute right-2 top-1/2 -translate-y-1/2 px-6 py-2 bg-cyan text-white rounded-md hover:bg-deep-blue transition-colors text-sm"
+        >
+          搜索
+        </button>
+      </form>
+    </div>
+  </div>
+</section>

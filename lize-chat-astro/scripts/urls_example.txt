@@ -1,0 +1,6 @@
+# 微信公众号文章 URL 列表示例
+# 每行一个 URL，以 # 开头的行为注释
+
+# 示例 URL（请替换为实际的文章 URL）
+# https://mp.weixin.qq.com/s/xxxxx
+# https://mp.weixin.qq.com/s/yyyyy

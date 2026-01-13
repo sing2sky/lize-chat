@@ -1,0 +1,45 @@
+---
+interface Props {
+  title: string;
+  summary?: string;
+  date: Date;
+  slug: string;
+  tags?: string[];
+  collection?: 'blog' | 'dialogue';
+}
+
+const { title, summary, date, slug, tags = [], collection = 'blog' } = Astro.props;
+const formattedDate = new Intl.DateTimeFormat('zh-CN', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+}).format(date);
+const href = collection === 'dialogue' ? `/dialogue/${slug}` : `/blog/${slug}`;
+---
+
+<a href={href} class="block group">
+  <div class="bg-white rounded-lg border border-gray-100 p-6 hover:border-cyan hover:shadow-sm transition-all duration-300">
+    <h3 class="text-xl font-serif font-semibold text-text-dark mb-3 group-hover:text-cyan transition-colors">
+      {title}
+    </h3>
+    {summary && (
+      <p class="text-gray-600 mb-4 line-clamp-2 text-sm leading-relaxed">
+        {summary}
+      </p>
+    )}
+    <div class="flex items-center justify-between">
+      <div class="text-sm text-gray-500">
+        {formattedDate}
+      </div>
+      {tags && tags.length > 0 && (
+        <div class="flex gap-2 flex-wrap">
+          {tags.slice(0, 3).map((tag) => (
+            <span class="px-2 py-1 text-xs bg-bg-light text-cyan rounded border border-gray-200">
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  </div>
+</a>

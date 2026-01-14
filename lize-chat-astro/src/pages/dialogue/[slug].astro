@@ -6,19 +6,11 @@ import type { CollectionEntry } from 'astro:content';
 import MarkdownIt from 'markdown-it';
 
 export async function getStaticPaths() {
-  try {
-    const dialogues = await getCollection('dialogue');
-    if (dialogues.length === 0) {
-      return [];
-    }
-    return dialogues.map((dialogue) => ({
-      params: { slug: dialogue.slug },
-      props: { dialogue },
-    }));
-  } catch (e) {
-    // 如果 dialogue 集合不存在或为空，返回空数组
-    return [];
-  }
+  const dialogues = await getCollection('dialogue');
+  return dialogues.map((dialogue) => ({
+    params: { slug: dialogue.slug },
+    props: { dialogue },
+  }));
 }
 
 interface Props {

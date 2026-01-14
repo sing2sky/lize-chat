@@ -5,6 +5,7 @@ import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 
 export async function getStaticPaths() {
+  // 仅获取 blog 目录下的文章
   const blogPosts = await getCollection('blog');
   return blogPosts.map((post) => ({
     params: { slug: post.slug },
@@ -17,9 +18,22 @@ interface Props {
 }
 
 const { post } = Astro.props;
-
-// 渲染文章内容
 const { Content } = await post.render();
+
+// 【核心修复】更鲁棒的日期处理逻辑
+const rawDate = post.data.pubDate || post.data.date || new Date();
+let displayDate = "";
+
+try {
+  const dateObj = rawDate instanceof Date ? rawDate : new Date(rawDate);
+  displayDate = new Intl.DateTimeFormat('zh-CN', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  }).format(dateObj);
+} catch (e) {
+  displayDate = "日期格式错误";
+}
 ---
 
 <Layout title={post.data.title} description={post.data.description}>
@@ -34,18 +48,7 @@ const { Content } = await post.render();
         </p>
       )}
       <time class="text-sm text-gray-500">
-        {(() => {
-          try {
-            const date = post.data.pubDate instanceof Date ? post.data.pubDate : new Date(post.data.pubDate);
-            return new Intl.DateTimeFormat('zh-CN', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            }).format(date);
-          } catch (e) {
-            return String(post.data.pubDate || '');
-          }
-        })()}
+        {displayDate}
       </time>
     </header>
 

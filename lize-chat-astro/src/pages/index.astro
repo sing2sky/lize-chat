@@ -19,7 +19,7 @@ try {
 // 获取 dialogue 集合
 let allDialogues: any[] = [];
 try {
-  allDialogues = await getCollection('blog');
+  allDialogues = await getCollection('dialogue');
 } catch (e) {
   // dialogue 集合可能不存在，忽略错误
 }
@@ -28,15 +28,19 @@ try {
 const allPosts = [
   ...allDialogues.map(post => ({
     ...post,
-    date: post.data.date,
+    date: post.data.date || new Date(),
     collection: 'dialogue' as const,
   })),
   ...allBlogPosts.map(post => ({
     ...post,
-    date: post.data.pubDate,
+    date: post.data.pubDate || post.data.date || new Date(),
     collection: 'blog' as const,
   })),
-].sort((a, b) => b.date.getTime() - a.date.getTime());
+].sort((a, b) => {
+  const dateA = a.date instanceof Date ? a.date : new Date(a.date);
+  const dateB = b.date instanceof Date ? b.date : new Date(b.date);
+  return dateB.getTime() - dateA.getTime();
+});
 ---
 
 <Layout title="丽泽讲会 | 思想的流转与碰撞">

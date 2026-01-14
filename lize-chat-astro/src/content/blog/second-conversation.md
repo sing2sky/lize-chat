@@ -1,9 +1,9 @@
 ---
 title: "探索 Web3 与去中心化未来"
-description: "与区块链专家探讨去中心化技术的可能性"
+description: 与区块链专家探讨去中心化技术的可能性
 pubDate: 2024-01-20
-guest: "区块链专家"
-host: "主持人"
+guest: 区块链专家
+host: 主持人
 ---
 
 ## Guest: 区块链专家

@@ -3,6 +3,40 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro'; // 引入导航栏
 import Hero from '../components/Hero.astro';     // 引入首屏
+import ConversationCard from '../components/ConversationCard.astro';
+import { getCollection } from 'astro:content';
+
+// 获取 blog 集合
+let allBlogPosts: any[] = [];
+try {
+  allBlogPosts = await getCollection('blog', ({ data }) => {
+    return import.meta.env.PROD ? data.draft !== true : true;
+  });
+} catch (e) {
+  console.error('Error loading blog posts:', e);
+}
+
+// 获取 dialogue 集合
+let allDialogues: any[] = [];
+try {
+  allDialogues = await getCollection('dialogue');
+} catch (e) {
+  // dialogue 集合可能不存在，忽略错误
+}
+
+// 合并并排序所有内容
+const allPosts = [
+  ...allDialogues.map(post => ({
+    ...post,
+    date: post.data.date,
+    collection: 'dialogue' as const,
+  })),
+  ...allBlogPosts.map(post => ({
+    ...post,
+    date: post.data.pubDate,
+    collection: 'blog' as const,
+  })),
+].sort((a, b) => b.date.getTime() - a.date.getTime());
 ---
 
 <Layout title="丽泽讲会 | 思想的流转与碰撞">
@@ -11,11 +45,27 @@ import Hero from '../components/Hero.astro';     // 引入首屏
 
         <Hero />
 
-        <section id="dialogues" class="container mx-auto px-6 py-20">
-            <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">最新讲会</h2>
-            <div class="text-center text-gray-500 py-12 bg-gray-50 rounded-2xl">
-                （对话列表组件即将上线...）
-            </div>
+        <section id="dialogues" class="container mx-auto px-6 py-20 pt-32">
+            <h2 class="text-3xl font-bold text-gray-900 mb-12 text-center">最新讲会</h2>
+            
+            {allPosts.length > 0 ? (
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {allPosts.map((post) => (
+                        <ConversationCard
+                            title={post.data.title}
+                            summary={post.data.summary || post.data.description}
+                            date={post.date}
+                            slug={post.slug}
+                            tags={post.data.tags}
+                            collection={post.collection}
+                        />
+                    ))}
+                </div>
+            ) : (
+                <div class="text-center text-gray-500 py-12 bg-gray-50 rounded-2xl">
+                    <p>暂无对话内容，敬请期待...</p>
+                </div>
+            )}
         </section>
 	</main>
 </Layout>

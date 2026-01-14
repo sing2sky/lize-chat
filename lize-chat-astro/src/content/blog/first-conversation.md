@@ -1,9 +1,9 @@
 ---
 title: "AI 与人类的未来对话"
-description: "探讨人工智能如何改变我们的工作和生活方式"
+description: 探讨人工智能如何改变我们的工作和生活方式
 pubDate: 2024-01-15
-guest: "GPT-4"
-host: "主持人"
+guest: GPT-4
+host: 主持人
 slideUrl: "https://example.com/slides/first-conversation"
 ---
 

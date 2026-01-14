@@ -1,7 +1,36 @@
-{
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "devCommand": "npm run dev",
-  "installCommand": "npm install",
-  "framework": "astro"
+﻿# No Chinese characters to avoid encoding issues
+$OutputEncoding = [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+
+# 1. Path Configuration
+$OBS_PATH = "D:\Documents\Obsidian Vault\lizechat\lize-chat-astro\src\content\blog"
+$WEB_PATH = "D:\lize-chat\lize-chat-astro\src\content\blog"
+$WEB_ROOT = "D:\lize-chat\lize-chat-astro"
+
+Write-Host "--- STEP 1: Moving files ---" -ForegroundColor Cyan
+
+# 2. Check and Copy
+if (Test-Path $OBS_PATH) {
+    Copy-Item -Path "$OBS_PATH\*" -Destination $WEB_PATH -Recurse -Force
+    Write-Host "SUCCESS: Files moved to web folder." -ForegroundColor Green
+} else {
+    Write-Host "ERROR: Path not found: $OBS_PATH" -ForegroundColor Red
+    Start-Sleep -Seconds 10
+    return
 }
+
+# 3. Git Sync
+Set-Location -Path $WEB_ROOT
+Write-Host "--- STEP 2: Pushing to GitHub ---" -ForegroundColor Cyan
+
+git add --all 
+$status = git status --porcelain
+if ($status) {
+    git commit -m "auto-sync: obsidian update $(Get-Date -Format 'MM-dd HH:mm')"
+    git push
+    Write-Host "SUCCESS: Push complete! Site is updating." -ForegroundColor Green
+} else {
+    Write-Host "INFO: No changes detected." -ForegroundColor Yellow
+}
+
+Write-Host "Closing in 5 seconds..."
+Start-Sleep -Seconds 5

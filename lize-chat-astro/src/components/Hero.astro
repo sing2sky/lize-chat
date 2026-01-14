@@ -1,25 +1,31 @@
 ---
+// src/components/Hero.astro
+// 首页第一屏，强调极简和视觉冲击力
 ---
+<section class="relative min-h-[85vh] flex items-center justify-center overflow-hidden bg-white pt-20">
+   <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+       <div class="w-[600px] h-[600px] md:w-[800px] md:h-[800px] bg-gradient-to-tr from-cyan-100/40 to-blue-100/40 rounded-full blur-3xl opacity-70 mix-blend-multiply"></div>
+   </div>
 
-<section class="bg-white py-16 border-b border-gray-100">
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-    <h1 class="text-3xl md:text-4xl font-serif text-text-dark mb-8 leading-relaxed">
-      丽泽讲会：思想的流转与碰撞
-    </h1>
-    <div class="max-w-2xl mx-auto">
-      <form class="relative" onsubmit="event.preventDefault(); const query = this.querySelector('input').value; if(query) window.location.href = '/?search=' + encodeURIComponent(query);">
-        <input
-          type="text"
-          placeholder="搜索对话内容..."
-          class="w-full px-6 py-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan focus:border-transparent text-text-dark placeholder-gray-400"
-        />
-        <button
-          type="submit"
-          class="absolute right-2 top-1/2 -translate-y-1/2 px-6 py-2 bg-cyan text-white rounded-md hover:bg-deep-blue transition-colors text-sm"
-        >
-          搜索
-        </button>
-      </form>
-    </div>
-  </div>
+   <div class="container mx-auto px-6 relative z-10 text-center">
+       <h1 class="text-5xl md:text-7xl font-extrabold text-gray-900 tracking-tight mb-8 leading-tight">
+           思想的<span class="text-transparent bg-clip-text bg-gradient-to-r from-[#00AEEF] to-blue-600">流转</span>，<br class="md:hidden"/>智慧的<span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-[#00AEEF]">碰撞</span>。
+       </h1>
+
+       <p class="text-xl md:text-2xl text-gray-500 max-w-2xl mx-auto mb-12 leading-relaxed font-light">
+           深度对话专栏。聚焦医药供应链的未来解析，探索 AI 时代的哲学本质。
+       </p>
+
+       <div class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-6">
+           <a href="#dialogues" class="group px-8 py-4 bg-[#00AEEF] text-white rounded-full font-semibold hover:bg-[#0099d3] transition-all shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 hover:-translate-y-0.5 flex items-center">
+               开始阅读
+               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform">
+                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+               </svg>
+           </a>
+           <a href="/about" class="px-8 py-4 bg-white text-gray-600 border-2 border-gray-100 rounded-full font-semibold hover:border-gray-300 hover:text-gray-900 transition-colors">
+               了解更多
+           </a>
+       </div>
+   </div>
 </section>

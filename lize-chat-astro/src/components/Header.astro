@@ -1,0 +1,31 @@
+---
+// src/components/Header.astro
+// 这是一个固定在顶部的极简导航栏
+---
+<header class="fixed w-full top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 transition-all duration-300">
+  <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+    <a href="/" class="flex items-center space-x-3 group">
+      <img
+        src="/logo.png"
+        alt="丽泽讲会 Logo"
+        class="h-10 w-auto transition-transform duration-300 group-hover:scale-110"
+      />
+      <span class="text-xl font-bold text-gray-900 tracking-tight">丽泽讲会</span>
+    </a>
+
+    <div class="hidden md:flex items-center space-x-8 font-medium text-sm text-gray-600">
+      <a href="/archives" class="hover:text-[#00AEEF] transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-[#00AEEF] after:transition-all after:duration-300 hover:after:w-full py-1">
+        讲会存档
+      </a>
+      <a href="/about" class="hover:text-[#00AEEF] transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-[#00AEEF] after:transition-all after:duration-300 hover:after:w-full py-1">
+        关于我们
+      </a>
+    </div>
+
+    <button class="md:hidden text-gray-600 p-2 rounded-md hover:bg-gray-100">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9h16.5m-16.5 6.75h16.5" />
+      </svg>
+    </button>
+  </nav>
+</header>

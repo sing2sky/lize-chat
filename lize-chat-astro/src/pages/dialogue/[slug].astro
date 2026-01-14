@@ -6,7 +6,7 @@ import type { CollectionEntry } from 'astro:content';
 import MarkdownIt from 'markdown-it';
 
 export async function getStaticPaths() {
-  const dialogues = await getCollection('dialogue');
+  const dialogues = await getCollection('blog');
   return dialogues.map((dialogue) => ({
     params: { slug: dialogue.slug },
     props: { dialogue },

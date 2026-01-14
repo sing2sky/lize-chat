@@ -3,7 +3,6 @@ import Layout from '../../layouts/Layout.astro';
 import ChatMessage from '../../components/ChatMessage.astro';
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
-import MarkdownIt from 'markdown-it';
 
 export async function getStaticPaths() {
   const blogPosts = await getCollection('blog');
@@ -21,114 +20,6 @@ const { post } = Astro.props;
 
 // 渲染文章内容
 const { Content } = await post.render();
-
-// 获取原始内容用于解析对话格式
-let rawContent = '';
-try {
-  rawContent = post.body || '';
-} catch (e) {
-  // 如果无法获取 body，使用空字符串
-  rawContent = '';
-}
-
-// 初始化 Markdown 渲染器
-const md = new MarkdownIt({
-  html: true,
-  linkify: true,
-  typographer: true,
-});
-
-// 解析内容，将对话分离为消息
-const messages: Array<{ speaker: 'guest' | 'host'; name?: string; renderedContent: string }> = [];
-
-// 检查是否是对话格式（包含 ## Guest: 或 ## Host:）
-const isDialogueFormat = rawContent && (
-  /^##\s+(guest|host|嘉宾|丽泽|主持人):/gmi.test(rawContent)
-);
-
-if (isDialogueFormat && rawContent) {
-  // 解析对话格式
-  const sections = rawContent.split(/^##\s+/gm).filter(s => s.trim());
-  let currentSpeaker: 'guest' | 'host' | null = null;
-  let currentName: string | undefined = undefined;
-  let currentContent: string[] = [];
-
-  for (const section of sections) {
-    const lines = section.split('\n');
-    const header = lines[0].trim();
-    
-    if (header.toLowerCase().match(/^(guest|嘉宾):/)) {
-      // 保存之前的消息
-      if (currentSpeaker && currentContent.length > 0) {
-        const contentText = currentContent.join('\n').trim();
-        if (contentText) {
-          try {
-            messages.push({
-              speaker: currentSpeaker,
-              name: currentName,
-              renderedContent: md.render(contentText),
-            });
-          } catch (e) {
-            messages.push({
-              speaker: currentSpeaker,
-              name: currentName,
-              renderedContent: `<p>${contentText}</p>`,
-            });
-          }
-        }
-      }
-      currentSpeaker = 'guest';
-      currentName = header.replace(/^(guest|嘉宾):\s*/i, '').trim() || undefined;
-      currentContent = lines.slice(1);
-    } else if (header.toLowerCase().match(/^(host|丽泽|主持人):/)) {
-      // 保存之前的消息
-      if (currentSpeaker && currentContent.length > 0) {
-        const contentText = currentContent.join('\n').trim();
-        if (contentText) {
-          try {
-            messages.push({
-              speaker: currentSpeaker,
-              name: currentName,
-              renderedContent: md.render(contentText),
-            });
-          } catch (e) {
-            messages.push({
-              speaker: currentSpeaker,
-              name: currentName,
-              renderedContent: `<p>${contentText}</p>`,
-            });
-          }
-        }
-      }
-      currentSpeaker = 'host';
-      currentName = header.replace(/^(host|丽泽|主持人):\s*/i, '').trim() || undefined;
-      currentContent = lines.slice(1);
-    } else if (currentSpeaker) {
-      // 继续当前消息的内容
-      currentContent.push(...lines);
-    }
-  }
-
-  // 保存最后一条消息
-  if (currentSpeaker && currentContent.length > 0) {
-    const contentText = currentContent.join('\n').trim();
-    if (contentText) {
-      try {
-        messages.push({
-          speaker: currentSpeaker,
-          name: currentName,
-          renderedContent: md.render(contentText),
-        });
-      } catch (e) {
-        messages.push({
-          speaker: currentSpeaker,
-          name: currentName,
-          renderedContent: `<p>${contentText}</p>`,
-        });
-      }
-    }
-  }
-}
 ---
 
 <Layout title={post.data.title} description={post.data.description}>
@@ -159,19 +50,9 @@ if (isDialogueFormat && rawContent) {
     </header>
 
     <div class="bg-white rounded-lg shadow-sm p-8 mb-8">
-      {messages.length > 0 ? (
-        messages.map((message) => (
-          <ChatMessage
-            speaker={message.speaker}
-            name={message.name || (message.speaker === 'guest' ? (post.data.guest || '作者') : (post.data.host || '丽泽'))}
-            content={message.renderedContent}
-          />
-        ))
-      ) : (
-        <div class="prose prose-lg max-w-none">
-          <Content />
-        </div>
-      )}
+      <div class="prose prose-lg max-w-none">
+        <Content />
+      </div>
     </div>
 
     {post.data.slideUrl && (
